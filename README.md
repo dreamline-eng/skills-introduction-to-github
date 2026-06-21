@@ -1,16 +1,15 @@
-# Introduction to GitHub
+# Resume — ARSALAN KHAN
 
-<img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
+This repository stores a single-source resume (resume.md) and an automated workflow to produce resume.pdf on every push to the `main` branch.
 
-Hey dreamline-eng!
+How to edit
+- Edit resume.md directly on GitHub or clone the repo, edit locally, then push your changes.
+- Commits to `main` will trigger the GitHub Action that builds resume.pdf.
 
-Mona here. I'm done preparing your exercise. Hope you enjoy! 💚
+How the workflow works
+- Uses a pandoc Docker image (pandoc/extra:3.5) with the Eisvogel LaTeX template to convert resume.md -> resume.pdf.
+- The action uploads resume.pdf as a build artifact and also pushes the PDF to a `pdf` branch for direct download.
 
-Remember, it's self-paced so feel free to take a break! ☕️
-
-[![](https://img.shields.io/badge/Go%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/dreamline-eng/skills-introduction-to-github/issues/1)
-
----
-
-&copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
-
+Options you can change
+- Use a different pandoc template (Eisvogel is included by default in the workflow).
+- Publish resume.pdf via GitHub Pages or attach it to releases — request this and I’ll update the workflow.
