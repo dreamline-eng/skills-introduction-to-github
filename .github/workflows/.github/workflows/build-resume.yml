@@ -1,0 +1,47 @@
+name: Build resume PDF
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'resume.md'
+      - '.github/workflows/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build PDF with pandoc/extra:3.5 (Eisvogel)
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}":/work \
+            -w /work pandoc/extra:3.5 \
+            pandoc resume.md -o resume.pdf \
+            --from markdown \
+            --template eisvogel \
+            --pdf-engine=xelatex
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-pdf
+          path: resume.pdf
+
+      - name: Push PDF to branch pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f resume.pdf ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git checkout -B pdf
+            git add resume.pdf
+            git commit -m "Build resume PDF" || echo "No changes to commit"
+            git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}" pdf --force
+          else
+            echo "No resume.pdf produced"
+          fi
